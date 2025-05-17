@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人学术主页</title>
+    <title>个人主页</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
@@ -507,20 +507,6 @@
             } else {
                 console.log("使用CSS备用彩虹效果");
                 // 保留CSS备用彩虹效果
-            }
-        });
-    </script>
-</body>
-</html>RainbowMesh = new THREE.Mesh(newGeometry, rainbowMaterial);
-                    scene.add(newRainbowMesh);
-                }
-                
-                // 开始动画
-                console.log("开始彩虹条带动画");
-                animate();
-                
-            } catch (error) {
-                console.error("初始化Three.js时出错:", error);
             }
         });
     </script>
