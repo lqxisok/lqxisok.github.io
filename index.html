@@ -1,514 +1,341 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人主页</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <title>Qingxuan Lv - Academic Profile</title>
     <style>
-        :root {
-            --bg-color: #121212;
-            --text-color: #e0e0e0;
-            --accent-color: #8c52ff;
-            --secondary-color: #3d3d3d;
-            --card-bg: #1e1e1e;
-            --header-bg: #000000;
-            --highlight: #a881ff;
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
             line-height: 1.6;
-        }
-        
-        /* 彩虹条带样式 */
-        .rainbow-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 8px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-        
-        /* 简单的CSS彩虹效果作为备用 */
-        .rainbow-fallback {
-            height: 8px;
-            width: 100%;
-            background: linear-gradient(
-                to right, 
-                #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8f00ff
-            );
-            background-size: 700% 100%;
-            animation: rainbow 4s linear infinite;
-        }
-        
-        @keyframes rainbow {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
-        }
-        
-        header {
-            background-color: var(--header-bg);
-            padding: 2rem 0;
-            text-align: center;
-            border-bottom: 3px solid var(--accent-color);
-            margin-top: 8px; /* 为彩虹条腾出空间 */
-        }
-        
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        header p {
-            font-size: 1.2rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
-        
-        .container {
-            max-width: 1200px;
+            color: #000000;
+            background-color: #ffffff;
+            max-width: 850px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 60px 30px;
         }
-        
-        section {
-            margin-bottom: 3rem;
+
+        /* Header Section */
+        header {
+            margin-bottom: 50px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #000000;
+            position: relative;
         }
-        
-        h2 {
+
+        header h1 {
             font-size: 1.8rem;
-            color: var(--accent-color);
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 0.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #000000;
+            letter-spacing: -0.5px;
         }
-        
-        .bio {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-        
-        @media (min-width: 768px) {
-            .bio {
-                flex-direction: row;
-            }
-        }
-        
-        .bio-image {
-            flex: 1;
-            text-align: center;
-        }
-        
-        .bio-image img {
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-            border: 3px solid var(--accent-color);
-            object-fit: cover;
-        }
-        
-        .bio-text {
-            flex: 2;
-        }
-        
-        .publication-list {
-            list-style-type: none;
-        }
-        
-        .publication-card {
-            background-color: var(--card-bg);
-            border-left: 4px solid var(--accent-color);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 0 8px 8px 0;
-            transition: transform 0.3s ease;
-        }
-        
-        .publication-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(140, 82, 255, 0.2);
-        }
-        
-        .publication-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.7rem;
-        }
-        
-        .publication-card .authors {
-            font-style: italic;
-            margin-bottom: 0.5rem;
-        }
-        
-        .publication-card .journal {
-            color: var(--highlight);
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-        
-        .publication-card .abstract {
+
+        header .title {
             font-size: 0.95rem;
-            margin-top: 1rem;
-            color: #b0b0b0;
+            color: #333333;
+            margin-bottom: 18px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
-        
-        .links {
-            display: flex;
-            flex-wrap: wrap;
-            margin-top: 1rem;
-            gap: 0.7rem;
-        }
-        
-        .link-btn {
-            display: inline-block;
-            padding: 0.4rem 0.8rem;
-            background-color: var(--secondary-color);
-            color: var(--text-color);
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            transition: background-color 0.3s ease;
-        }
-        
-        .link-btn:hover {
-            background-color: var(--accent-color);
-        }
-        
-        .skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .skill-tag {
-            background-color: var(--secondary-color);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
-        
+
         .contact-info {
             display: flex;
             flex-wrap: wrap;
-            gap: 1.5rem;
-            justify-content: center;
+            gap: 15px;
+            font-size: 0.85rem;
         }
-        
+
         .contact-info a {
-            color: var(--text-color);
+            color: #000000;
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: color 0.3s ease;
+            padding: 2px 0;
+            border-bottom: 1px solid #cccccc;
+            transition: border-color 0.2s;
         }
-        
+
         .contact-info a:hover {
-            color: var(--accent-color);
+            border-bottom-color: #000000;
         }
-        
+
+        .contact-info a::before {
+            content: '> ';
+            opacity: 0.6;
+        }
+
+        /* Section Styles */
+        section {
+            margin-bottom: 45px;
+        }
+
+        h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #000000;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::before {
+            content: '# ';
+            opacity: 0.5;
+        }
+
+        /* Bio Section */
+        .bio-text {
+            color: #000000;
+            margin-bottom: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .research-interests {
+            margin-top: 15px;
+            color: #333333;
+            font-size: 0.9rem;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .research-interests strong {
+            color: #000000;
+        }
+
+        /* Publication List */
+        .publication-list {
+            list-style-type: none;
+        }
+
+        .publication-item {
+            margin-bottom: 30px;
+            padding-left: 20px;
+            border-left: 2px solid #e0e0e0;
+            transition: border-color 0.3s;
+        }
+
+        .publication-item:hover {
+            border-left-color: #000000;
+        }
+
+        .pub-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #000000;
+            line-height: 1.5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .pub-authors {
+            font-size: 0.85rem;
+            color: #444444;
+            margin-bottom: 5px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .pub-authors .me {
+            font-weight: 600;
+            color: #000000;
+            text-decoration: underline;
+        }
+
+        .pub-venue {
+            font-size: 0.85rem;
+            color: #666666;
+            font-style: italic;
+            margin-bottom: 8px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .pub-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .pub-links a {
+            font-size: 0.8rem;
+            color: #000000;
+            text-decoration: none;
+            border: 1px solid #000000;
+            padding: 2px 8px;
+            transition: all 0.2s;
+            font-family: 'Courier New', monospace;
+        }
+
+        .pub-links a:hover {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        /* Education Section */
+        .education-list {
+            list-style-type: none;
+        }
+
+        .education-item {
+            margin-bottom: 25px;
+            padding-left: 20px;
+            border-left: 2px solid #e0e0e0;
+        }
+
+        .edu-degree {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 6px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .edu-school {
+            font-size: 0.85rem;
+            color: #444444;
+            margin-bottom: 5px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .edu-details {
+            font-size: 0.8rem;
+            color: #666666;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        /* Footer */
         footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #cccccc;
             text-align: center;
-            padding: 2rem;
-            background-color: var(--header-bg);
-            margin-top: 2rem;
-            border-top: 3px solid var(--accent-color);
+            font-size: 0.75rem;
+            color: #999999;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 40px 20px;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                gap: 8px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- 彩虹条带容器 -->
-    <div class="rainbow-container">
-        <div class="rainbow-fallback"></div>
-    </div>
-    
     <header>
-            
-        </div>
-        <h1>吕清轩</h1>
-        <!-- <p>计算机科学研究生</p> -->
+        <h1>Qingxuan Lv (吕清轩)</h1>
+        <p class="title">Ph.D. Candidate in Computer Science</p>
         <div class="contact-info">
-            <a href="mailto:your.email@example.com">📧 lvqingxuan@stu.ouc.edu.cn</a>
-            <a href="https://github.com/lqxisok" target="_blank">💻 GitHub</a>
-            <a href="https://scholar.google.com.hk/citations?user=SiNtSMcAAAAJ&hl=zh-CN" target="_blank">📚 Google Scholar</a>
+            <a href="mailto:lvqingxuan@stu.ouc.edu.cn">lvqingxuan@stu.ouc.edu.cn</a>
+            <a href="https://github.com/lqxisok" target="_blank">GitHub</a>
+            <a href="https://scholar.google.com.hk/citations?user=SiNtSMcAAAAJ&hl=zh-CN" target="_blank">Google Scholar</a>
         </div>
     </header>
 
-    <div class="container">
-        <section id="about">
-            <h2>关于我</h2>
-            <div class="bio">
-                <div class="bio-image">
-                    <img src="./lqx.jpg" alt="个人照片">
+    <section id="about">
+        <h2>About</h2>
+        <div class="bio-text">
+            <p>I am a Ph.D. candidate in Computer Science at Ocean University of China, supervised by Professor Junyu Dong. My research focuses on computer vision and deep learning, with particular interests in stereo matching, semantic segmentation, object detection, and cross-domain adaptation.</p>
+        </div>
+        <div class="research-interests">
+            <strong>Research Interests:</strong> Computer Vision, Deep Learning, Stereo Matching, Semantic Segmentation, Domain Adaptation
+        </div>
+    </section>
+
+    <section id="publications">
+        <h2>Publications</h2>
+        <ul class="publication-list">
+            <li class="publication-item">
+                <div class="pub-title">UWStereo: A Large Synthetic Dataset for Underwater Stereo Matching</div>
+                <div class="pub-authors"><span class="me">Qingxuan Lv</span>, Junyu Dong, Yuezun Li, Sheng Chen, Hui Yu, Shu Zhang, Wenhan Wang</div>
+                <div class="pub-venue">arXiv preprint arXiv:2409.01782, 2024</div>
+                <div class="pub-links">
+                    <a href="https://arxiv.org/abs/2409.01782" target="_blank">Paper</a>
                 </div>
-                <div class="bio-text">
-                    <p>简介。</p>
-                    <p>研究兴趣主要集中在，例如人工智能、计算机视觉、网络安全等，师从董军宇教授。</p>
-                    <div class="skills">
-                        <div class="skill-tag">PyTorch</div>
-                        <div class="skill-tag">DeepStream</div>
-                        <div class="skill-tag">Object Detection</div>
-                        <div class="skill-tag">Semantic Segmentation</div>
-                        <div class="skill-tag">Stereo Matching</div>
-                    </div>
+            </li>
+            <li class="publication-item">
+                <div class="pub-title">Domainforensics: Exposing Face Forgery Across Domains via Bi-directional Adaptation</div>
+                <div class="pub-authors"><span class="me">Qingxuan Lv</span>, Yuezun Li, Junyu Dong, Sheng Chen, Hui Yu, Huiyu Zhou, Shu Zhang</div>
+                <div class="pub-venue">IEEE Transactions on Information Forensics and Security, 2024</div>
+                <div class="pub-links">
+                    <a href="#" target="_blank">Paper</a>
                 </div>
-            </div>
-        </section>
+            </li>
+            <li class="publication-item">
+                <div class="pub-title">PhyTracker: An Online Tracker for Phytoplankton</div>
+                <div class="pub-authors">Yang Yu, <span class="me">Qingxuan Lv</span>, Yuezun Li, Zhiqiang Wei, Junyu Dong</div>
+                <div class="pub-venue">IEEE Transactions on Circuits and Systems for Video Technology, 2024</div>
+                <div class="pub-links">
+                    <a href="#" target="_blank">Paper</a>
+                </div>
+            </li>
+            <li class="publication-item">
+                <div class="pub-title">LaFea: Learning Latent Representation Beyond Feature for Universal Domain Adaptation</div>
+                <div class="pub-authors"><span class="me">Qingxuan Lv</span>, Yuezun Li, Junyu Dong, Ziqian Guo</div>
+                <div class="pub-venue">IEEE Transactions on Circuits and Systems for Video Technology, 2023</div>
+                <div class="pub-links">
+                    <a href="#" target="_blank">Paper</a>
+                </div>
+            </li>
+            <li class="publication-item">
+                <div class="pub-title">Real-Time Sky Replacement for Mobile AR</div>
+                <div class="pub-authors">Xinjie Wang, <span class="me">Qingxuan Lv</span>, Guo Chen, Jing Zhang, Zhiqiang Wei, Junyu Dong, Hongbo Fu, Zhipeng Zhu, Jingxin Liu, Xiaogang Jin</div>
+                <div class="pub-venue">IEEE Transactions on Visualization and Computer Graphics, 2023</div>
+                <div class="pub-links">
+                    <a href="#" target="_blank">Paper</a>
+                </div>
+            </li>
+            <li class="publication-item">
+                <div class="pub-title">Parallel Complement Network for Real-time Semantic Segmentation of Road Scenes</div>
+                <div class="pub-authors"><span class="me">Qingxuan Lv</span>, Xin Sun, Changrui Chen, Junyu Dong, Huiyu Zhou</div>
+                <div class="pub-venue">IEEE Transactions on Intelligent Transportation Systems, 2021</div>
+                <div class="pub-links">
+                    <a href="#" target="_blank">Paper</a>
+                </div>
+            </li>
+            <li class="publication-item">
+                <div class="pub-title">RRNet: A Hybrid Detector for Object Detection in Drone-Captured Images</div>
+                <div class="pub-authors">Changrui Chen, Yu Zhang, <span class="me">Qingxuan Lv</span>, Shuo Wei, Xiaorui Wang, Xin Sun, Junyu Dong</div>
+                <div class="pub-venue">Proceedings of the IEEE/CVF International Conference on Computer Vision Workshops, 2019</div>
+                <div class="pub-links">
+                    <a href="#" target="_blank">Paper</a>
+                </div>
+            </li>
+        </ul>
+    </section>
 
-        <section id="publications">
-            <h2>发表论文</h2>
-            <ul class="publication-list">
-                <li class="publication-card">
-                    <h3>UWStereo: A Large Synthetic Dataset for Underwater Stereo Matching</h3>
-                    <div class="authors">Qingxuan Lv, Junyu Dong, Yuezun Li, Sheng Chen, Hui Yu, Shu Zhang, Wenhan Wang</div>
-                    <div class="journal">arXiv preprint arXiv:2409.01782, 2024</div>
-                    <div class="links">
-                        <a href="#" class="link-btn">PDF</a>
-                        <a href="#" class="link-btn">代码</a>
-                        <a href="#" class="link-btn">演示</a>
-                        <a href="#" class="link-btn">DOI</a>
-                    </div>
-                </li>
-                <li class="publication-card">
-                    <h3>Domainforensics: Exposing face forgery across domains via bi-directional adaptation</h3>
-                    <div class="authors">Qingxuan Lv, Yuezun Li, Junyu Dong, Sheng Chen, Hui Yu, Huiyu Zhou, Shu Zhang</div>
-                    <div class="journal">IEEE Transactions on Information Forensics and Security, 2024</div>
-                    <div class="links">
-                        <a href="#" class="link-btn">PDF</a>
-                        <a href="#" class="link-btn">代码</a>
-                        <a href="#" class="link-btn">演示</a>
-                        <a href="#" class="link-btn">DOI</a>
-                    </div>
-                </li>
-                <li class="publication-card">
-                    <h3>PhyTracker: An Online Tracker for Phytoplankton</h3>
-                    <div class="authors">Yang Yu, Qingxuan Lv, Yuezun Li, Zhiqiang Wei, Junyu Dong</div>
-                    <div class="journal">IEEE Transactions on Circuits and Systems for Video Technology, 2024</div>
-                    <div class="links">
-                        <a href="#" class="link-btn">PDF</a>
-                        <a href="#" class="link-btn">代码</a>
-                        <a href="#" class="link-btn">演示</a>
-                        <a href="#" class="link-btn">DOI</a>
-                    </div>
-                </li>
-                <li class="publication-card">
-                    <h3>LaFea: Learning latent representation beyond feature for universal domain adaptation</h3>
-                    <div class="authors">Qingxuan Lv, Yuezun Li, Junyu Dong, Ziqian Guo</div>
-                    <div class="journal">IEEE Transactions on Circuits and Systems for Video Technology, 2023</div>
-                    <div class="links">
-                        <a href="#" class="link-btn">PDF</a>
-                        <a href="#" class="link-btn">代码</a>
-                        <a href="#" class="link-btn">演示</a>
-                        <a href="#" class="link-btn">DOI</a>
-                    </div>
-                </li>
-                <li class="publication-card">
-                    <h3>Real-Time Sky Replacement for Mobile AR</h3>
-                    <div class="authors">Xinjie Wang, Qingxuan Lv, Guo Chen, Jing Zhang, Zhiqiang Wei, Junyu Dong, Hongbo Fu, Zhipeng Zhu, Jingxin Liu, Xiaogang Jin</div>
-                    <div class="journal">IEEE Transactions on Visualization and Computer Graphics, 2023</div>
-                    <div class="links">
-                        <a href="#" class="link-btn">PDF</a>
-                        <a href="#" class="link-btn">代码</a>
-                        <a href="#" class="link-btn">演示</a>
-                        <a href="#" class="link-btn">DOI</a>
-                    </div>
-                </li>
-                <li class="publication-card">
-                    <h3>Parallel complement network for real-time semantic segmentation of road scenes</h3>
-                    <div class="authors"> Qingxuan Lv, Xin Sun, Changrui Chen, Junyu Dong, Huiyu Zhou</div>
-                    <div class="journal">IEEE Transactions on Intelligent Transportation Systems, 2021</div>
-                    <div class="links">
-                        <a href="#" class="link-btn">PDF</a>
-                        <a href="#" class="link-btn">代码</a>
-                        <a href="#" class="link-btn">DOI</a>
-                    </div>
-                </li>
-                <li class="publication-card">
-                    <h3>Rrnet: A hybrid detector for object detection in drone-captured images</h3>
-                    <div class="authors">Changrui Chen, Yu Zhang, Qingxuan Lv, Shuo Wei, Xiaorui Wang, Xin Sun, Junyu Dong</div>
-                    <div class="journal">Proceedings of the IEEE/CVF international conference on computer vision workshops, 2019</div>
-                    <div class="links">
-                        <a href="#" class="link-btn">PDF</a>
-                        <a href="#" class="link-btn">代码</a>
-                        <a href="#" class="link-btn">演示</a>
-                        <a href="#" class="link-btn">DOI</a>
-                    </div>
-                </li>
-            </ul>
-        </section>
-
-        <!-- <section id="projects">
-            <h2>研究项目</h2>
-            <ul class="publication-list">
-                <li class="publication-card">
-                    <h3>项目名称：智能医疗图像分析系统</h3>
-                    <div class="abstract">项目简介: 开发了一套用于医疗图像自动分析的深度学习系统，能够辅助医生进行诊断。该系统能够识别多种疾病特征，并提供诊断建议，目前已在三家医院进行试点应用。</div>
-                    <div class="links">
-                        <a href="#" class="link-btn">项目详情</a>
-                        <a href="#" class="link-btn">Demo</a>
-                    </div>
-                </li>
-            </ul>
-        </section> -->
-
-        <section id="education">
-            <h2>教育背景</h2>
-            <ul class="publication-list">
-                <li class="publication-card">
-                    <h3>博士学位，计算机应用技术</h3>
-                    <div class="journal">中国海洋大学, 2021-至今</div>
-                    <div class="abstract">研究方向：人工智能、机器学习、计算机视觉等。导师：董军宇教授</div>
-                </li>
-                <li class="publication-card">
-                    <h3>硕士学位，计算机系统结构</h3>
-                    <div class="journal">中国海洋大学, 2018-2021</div>
-                    <div class="abstract">研究方向：人工智能、机器学习、计算机视觉等。导师：董军宇教授</div>
-                </li>
-                <!-- <li class="publication-card">
-                    <h3>学士学位，计算机科学</h3>
-                    <div class="journal">XXX大学, 2017-2021</div>
-                    <div class="abstract">主修课程：数据结构、算法分析、操作系统、计算机网络、数据库系统等</div>
-                </li> -->
-            </ul>
-        </section>
-    </div>
+    <section id="education">
+        <h2>Education</h2>
+        <ul class="education-list">
+            <li class="education-item">
+                <div class="edu-degree">Ph.D. in Computer Science</div>
+                <div class="edu-school">Ocean University of China, 2021-Present</div>
+                <div class="edu-details">Research Focus: Artificial Intelligence, Machine Learning, Computer Vision | Advisor: Prof. Junyu Dong</div>
+            </li>
+            <li class="education-item">
+                <div class="edu-degree">M.S. in Computer Architecture</div>
+                <div class="edu-school">Ocean University of China, 2018-2021</div>
+                <div class="edu-details">Research Focus: Artificial Intelligence, Machine Learning, Computer Vision | Advisor: Prof. Junyu Dong</div>
+            </li>
+        </ul>
+    </section>
 
     <footer>
-        <p>© 2025 个人学术主页 | 最后更新于 2025年5月</p>
+        <p>Last updated: January 2025</p>
     </footer>
-
-    <script>
-        window.addEventListener('load', function() {
-            // 判断是否支持WebGL
-            function webglAvailable() {
-                try {
-                    const canvas = document.createElement('canvas');
-                    return !!window.WebGLRenderingContext &&
-                        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
-                } catch(e) {
-                    return false;
-                }
-            }
-            
-            // 如果支持WebGL且Three.js加载成功，则使用Three.js创建彩虹效果
-            if (webglAvailable() && typeof THREE !== 'undefined') {
-                console.log("使用Three.js创建彩虹效果");
-                
-                // 移除CSS备用彩虹
-                const fallback = document.querySelector('.rainbow-fallback');
-                if (fallback) fallback.remove();
-                
-                const container = document.querySelector('.rainbow-container');
-                
-                // 创建场景
-                const scene = new THREE.Scene();
-                
-                // 创建相机 (正交相机适合2D效果)
-                const camera = new THREE.OrthographicCamera(
-                    -window.innerWidth / 2, window.innerWidth / 2,
-                    8 / 2, -8 / 2,
-                    0.1, 100
-                );
-                camera.position.z = 5;
-                
-                // 创建渲染器
-                const renderer = new THREE.WebGLRenderer({ 
-                    alpha: true, 
-                    antialias: true,
-                    powerPreference: "high-performance" 
-                });
-                renderer.setSize(window.innerWidth, 8);
-                renderer.setPixelRatio(window.devicePixelRatio);
-                container.appendChild(renderer.domElement);
-                
-                // 创建彩虹着色器材质
-                const uniforms = {
-                    time: { value: 0 }
-                };
-                
-                const rainbowMaterial = new THREE.ShaderMaterial({
-                    uniforms: uniforms,
-                    vertexShader: `
-                        varying vec2 vUv;
-                        
-                        void main() {
-                            vUv = uv;
-                            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                        }
-                    `,
-                    fragmentShader: `
-                        uniform float time;
-                        varying vec2 vUv;
-                        
-                        // 彩虹色函数
-                        vec3 rainbow(float t) {
-                            vec3 c = 0.5 + 0.5*cos(6.28318*(t + vec3(0.0, 0.33, 0.67)));
-                            return c;
-                        }
-                        
-                        void main() {
-                            // 创建滚动效果
-                            float t = fract(vUv.x + time * 0.2);
-                            
-                            // 添加波浪效果
-                            float wave = sin(vUv.x * 40.0 + time * 5.0) * 0.03;
-                            t = t + wave;
-                            
-                            // 获取彩虹颜色
-                            vec3 color = rainbow(t);
-                            
-                            // 亮度变化
-                            float brightness = 0.8 + 0.2 * sin(time * 3.0 + vUv.x * 20.0);
-                            color *= brightness;
-                            
-                            gl_FragColor = vec4(color, 1.0);
-                        }
-                    `
-                });
-                
-                // 创建平面
-                const geometry = new THREE.PlaneGeometry(window.innerWidth, 8);
-                const mesh = new THREE.Mesh(geometry, rainbowMaterial);
-                scene.add(mesh);
-                
-                // 处理窗口大小变化
-                window.addEventListener('resize', () => {
-                    camera.left = -window.innerWidth / 2;
-                    camera.right = window.innerWidth / 2;
-                    camera.updateProjectionMatrix();
-                    
-                    renderer.setSize(window.innerWidth, 8);
-                    
-                    // 更新网格大小
-                    mesh.geometry.dispose();
-                    mesh.geometry = new THREE.PlaneGeometry(window.innerWidth, 8);
-                });
-                
-                // 动画循环
-                function animate() {
-                    requestAnimationFrame(animate);
-                    uniforms.time.value += 0.01;
-                    renderer.render(scene, camera);
-                }
-                
-                animate();
-            } else {
-                console.log("使用CSS备用彩虹效果");
-                // 保留CSS备用彩虹效果
-            }
-        });
-    </script>
 </body>
 </html>
