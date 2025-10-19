@@ -27,6 +27,25 @@
             padding-bottom: 25px;
             border-bottom: 2px solid #000000;
             position: relative;
+            display: flex;
+            align-items: flex-start;
+            gap: 30px;
+        }
+
+        .header-content {
+            flex: 1;
+        }
+
+        .header-photo {
+            flex-shrink: 0;
+        }
+
+        .header-photo img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 2px solid #000000;
+            border-radius: 4px;
         }
 
         header h1 {
@@ -224,6 +243,16 @@
                 padding: 40px 20px;
             }
 
+            header {
+                flex-direction: column-reverse;
+                align-items: center;
+            }
+
+            .header-photo img {
+                width: 120px;
+                height: 120px;
+            }
+
             header h1 {
                 font-size: 1.5rem;
             }
@@ -237,12 +266,17 @@
 </head>
 <body>
     <header>
-        <h1>Qingxuan Lv (吕清轩)</h1>
-        <p class="title">Ph.D. Candidate in Computer Science</p>
-        <div class="contact-info">
-            <a href="mailto:lvqingxuan@stu.ouc.edu.cn">lvqingxuan@stu.ouc.edu.cn</a>
-            <a href="https://github.com/lqxisok" target="_blank">GitHub</a>
-            <a href="https://scholar.google.com.hk/citations?user=SiNtSMcAAAAJ&hl=zh-CN" target="_blank">Google Scholar</a>
+        <div class="header-content">
+            <h1>Qingxuan Lv (吕清轩)</h1>
+            <p class="title">Ph.D. Candidate in Computer Science</p>
+            <div class="contact-info">
+                <a href="mailto:lvqingxuan@stu.ouc.edu.cn">lvqingxuan@stu.ouc.edu.cn</a>
+                <a href="https://github.com/lqxisok" target="_blank">GitHub</a>
+                <a href="https://scholar.google.com.hk/citations?user=SiNtSMcAAAAJ&hl=zh-CN" target="_blank">Google Scholar</a>
+            </div>
+        </div>
+        <div class="header-photo">
+            <img src="lqx.jpg" alt="Qingxuan Lv">
         </div>
     </header>
 
@@ -254,6 +288,20 @@
         <div class="research-interests">
             <strong>Research Interests:</strong> Computer Vision, Deep Learning, Stereo Matching, Semantic Segmentation, Domain Adaptation
         </div>
+    </section>
+
+    <section id="projects">
+        <h2>Research Projects</h2>
+        <ul class="publication-list">
+            <li class="publication-item">
+                <div class="pub-title">Underwater SLAM & Stereo Matching Platform</div>
+                <div class="pub-authors">HTTP-Based Backend Server for Underwater Computer Vision</div>
+                <div class="pub-venue">Ongoing Research Project, 2024-Present</div>
+                <div class="pub-links">
+                    <a href="underwater-slam.html" target="_blank">View Project</a>
+                </div>
+            </li>
+        </ul>
     </section>
 
     <section id="publications">
